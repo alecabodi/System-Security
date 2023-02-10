@@ -14,5 +14,6 @@ The solution is written in the provided pdf template. Grade: 6/6
 
 ### Assignment 3
 The goal of this exercise is to implement a simple protocol using Intel SGX enclaves. See the handout for details. 
+> The code has not been cleaned and the implementation it is meant to be perfectly secure (e.g. IV in AES is not random) 
 
 Grade: 6/6
