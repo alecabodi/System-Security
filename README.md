@@ -1,4 +1,4 @@
-# SysSec ETHZ
+# SysSec ETHZ Assignements
 
 This repository contains my solutions to the three assignements proposed in System Security in Fall Semester 2022. 
 
