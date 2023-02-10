@@ -1,0 +1,67 @@
+/*
+ * Copyright (C) 2011-2020 Intel Corporation. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of Intel Corporation nor the names of its
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+
+/* Enclave.edl - Top EDL file. */
+
+enclave {
+
+    /* Import ECALL/OCALL from sub-directory EDLs.
+     *  [from]: specifies the location of EDL file.
+     *  [import]: specifies the functions to import,
+     *  [*]: implies to import all functions.
+     */
+
+    trusted{
+      /* public ECALLS */
+      public sgx_status_t printSecret(void);
+      public sgx_status_t generateKeyPair([out, count=64] uint8_t *pk);
+      public sgx_status_t computeSharedSecret([in, count=64] uint8_t *tmp_remote_pk);
+      public sgx_status_t checkPSK([in, count=10] uint8_t *encrypted_PSK);
+      public sgx_status_t getPSK([out, count=10] uint8_t *encrypted_PSK);
+      public sgx_status_t getChallenge([in, count=2] uint8_t *encrypted_challenge, [out, count=2] uint8_t *decrypted_challenge);
+      public sgx_status_t computeResponse([in, count=2] uint8_t *challenge, [out, count=2] uint8_t *encrypted_response);
+
+      /* private ECALLS */
+      sgx_status_t encrypt([in, count=len] uint8_t *m, [out, count=len] uint8_t *c, size_t len);
+      sgx_status_t decrypt([in, count=len] uint8_t *c, [out, count=len] uint8_t *m, size_t len);
+    };
+
+    /*
+     * ocall_print_string - invokes OCALL to display string buffer inside the enclave.
+     *  [in]: copy the string buffer to App outside.
+     *  [string]: specifies 'str' is a NULL terminated buffer.
+     */
+
+    untrusted {
+        void ocall_print_string([in, string] const char *str);
+    };
+
+};
